@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+.ventes-container {
+  padding: 2rem;
+  font-family: 'Indie Flower', cursive;
+}
+
+.loading-sketch {
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 2rem;
+  color: #666;
+  position: relative;
+}
+
+.loading-sketch::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: repeating-linear-gradient(
+    to right,
+    #666 0,
+    #666 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  animation: loading 1s infinite linear;
+}
+
+@keyframes loading {
+  0% { transform: translateX(-60%); }
+  100% { transform: translateX(-40%); }
+}
+
+.ventes-title {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.ventes-title::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #333;
+  opacity: 0.7;
+}
+
+.table-container {
+  background: #fff;
+  border: 2px solid #333;
+  padding: 1.5rem;
+  border-radius: 8px;
+  position: relative;
+  filter: url(#pencil-effect);
+  overflow-x: auto;
+}
+
+.table-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.02) 2px,
+    rgba(0, 0, 0, 0.02) 4px
+  );
+  pointer-events: none;
+}
+
+.ventes-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 1rem;
+}
+
+.ventes-table th,
+.ventes-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #333;
+  position: relative;
+}
+
+.ventes-table th {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+  background: rgba(51, 51, 51, 0.05);
+}
+
+.ventes-table th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #333;
+  opacity: 0.7;
+}
+
+.ventes-table tbody td {
+  font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 500;
+  color: #1f2937;
+  font-size: 1.05rem;
+  letter-spacing: 0.2px;
+}
+
+.ventes-table tr {
+  transition: all 0.3s ease;
+}
+
+.ventes-table tr:hover {
+  background: rgba(51, 51, 51, 0.05);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Icon style for action column */
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  color: #374151;
+  font-size: 1.05rem;
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  margin: 0 auto;
+  fill: currentColor;
+}
+
+.icon-btn svg * {
+  stroke-width: 0;
+}
+
+.icon-btn.view-icon {
+  color: #2563eb; /* blue */
+}
+
+.icon-btn.cancel-icon {
+  color: #f59e0b; /* amber/orange */
+}
+
+.icon-btn.cancel-icon:disabled {
+  color: #9ca3af; /* gray */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.icon-btn.cancel-icon:disabled:hover {
+  background: transparent;
+  transform: none;
+}
+
+.icon-btn.delete-icon {
+  color: #dc2626; /* red */
+}
+
+.icon-btn:hover {
+  background: rgba(0,0,0,0.04);
+  transform: translateY(-1px);
+}
+
+/* Statut styling */
+.statut {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.statut-valide {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.statut-en-cours {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.items-per-page {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Indie Flower', cursive;
+}
+
+.items-per-page select {
+  padding: 0.5rem;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #fff;
+  font-family: 'Indie Flower', cursive;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Indie Flower', cursive;
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  background: #fff;
+  font-family: 'Indie Flower', cursive;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  min-width: 40px;
+}
+
+.pagination-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.02) 1px,
+    rgba(0, 0, 0, 0.02) 2px
+  );
+  pointer-events: none;
+}
+
+.pagination-btn.active {
+  background: #333;
+  color: #fff;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: rgba(51, 51, 51, 0.1);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+  padding: 0.5rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .table-container {
+    margin: 0 -1rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .ventes-table th,
+  .ventes-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
