@@ -1,0 +1,103 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background: #f8f8f8;
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-right: 2px solid #333;
+  filter: url(#pencil-effect);
+}
+
+/* Effet de dessin au crayon */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+  pointer-events: none;
+}
+
+.sidebar-container {
+  padding: 2rem 1.5rem;
+}
+
+.sketch-title {
+  font-family: 'Indie Flower', cursive;
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 2rem;
+  position: relative;
+  text-align: center;
+}
+
+.sketch-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 2px;
+  background: #333;
+  opacity: 0.7;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-item {
+  margin: 1rem 0;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.8rem 1rem;
+  color: #333;
+  text-decoration: none;
+  font-family: 'Indie Flower', cursive;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  border: 1px solid #333;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: #333;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::before {
+  transform: scaleX(1);
+}
+
+/* SVG Filter pour l'effet crayon */
+.sidebar svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+}

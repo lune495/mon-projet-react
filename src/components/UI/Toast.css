@@ -1,0 +1,13 @@
+.toast-container {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: #333;
+  color: #fff;
+  padding: 10px 14px;
+  border: 2px solid #fff;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  font-family: 'Indie Flower', cursive;
+  z-index: 2000;
+}

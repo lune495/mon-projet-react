@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Apply the readable/stylish font only to dynamic product cells (tbody) */
+.products-table tbody td {
+  font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 500;
+  color: #1f2937; /* slightly darker gray for better contrast */
+  font-size: 1.05rem;
+  letter-spacing: 0.2px;
+}
