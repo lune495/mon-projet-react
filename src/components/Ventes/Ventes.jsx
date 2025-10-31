@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import auth from '../../api/auth';
 import './Ventes.css';
-import { FaEye, FaTrash, FaBan } from 'react-icons/fa';
+import { FaEye, FaFilePdf, FaTimes, FaPlus } from 'react-icons/fa';
 import Toast from '../UI/Toast';
 import VenteDetailModal from './VenteDetailModal';
+import NouvelleVenteModal from './NouvelleVenteModal';
 
 const Ventes = () => {
   const [ventes, setVentes] = useState([]);
@@ -14,6 +16,8 @@ const Ventes = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [selectedVente, setSelectedVente] = useState(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [confirmAnnulationId, setConfirmAnnulationId] = useState(null);
+  const [isNewSaleModalOpen, setIsNewSaleModalOpen] = useState(false);
 
   const fetchVentes = async (page, count) => {
     try {
@@ -107,9 +111,48 @@ const Ventes = () => {
     return paye ? 'statut-valide' : 'statut-en-cours';
   };
 
+  // Handler pour confirmer l'annulation
+  const handleConfirmAnnulation = () => {
+    if (confirmAnnulationId) {
+      const token = auth.getToken();
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      };
+
+      axios.post(`https://www.chifaa.sn/pharma_back_test/api/venteannulee/${confirmAnnulationId}`, {}, { headers })
+        .then(() => {
+          setToastMessage('Vente annulée avec succès');
+          setVentes(prev => prev.map(v => v.id === confirmAnnulationId ? { ...v, statut: true } : v));
+        })
+        .catch(() => {
+          setToastMessage("Erreur lors de l'annulation de la vente");
+        })
+        .finally(() => {
+          setConfirmAnnulationId(null);
+        });
+    }
+  };
+
+  // Handler pour annuler la confirmation
+  const handleCancelAnnulation = () => {
+    setConfirmAnnulationId(null);
+  };
+
   return (
     <div className="ventes-container">
-      <h1 className="ventes-title">Liste des Ventes</h1>
+      <div className="ventes-header">
+        <h1 className="ventes-title">Liste des Ventes</h1>
+        <button 
+          className="new-sale-btn"
+          onClick={() => {
+            console.log('Ouverture modal nouvelle vente');
+            setIsNewSaleModalOpen(true);
+          }}
+        >
+          <FaPlus /> Nouvelle vente
+        </button>
+      </div>
       
       <div className="table-container">
         {loading ? (
@@ -130,7 +173,7 @@ const Ventes = () => {
               </thead>
               <tbody>
                 {ventes.map((vente) => (
-                  <tr key={vente.id}>
+                  <tr key={vente.id} className={vente.statut === true ? 'vente-annulee' : ''}>
                     <td>{formatDate(vente.created_at)}</td>
                     <td>{vente.numero}</td>
                     <td>{formatHeure(vente.created_at)}</td>
@@ -152,7 +195,7 @@ const Ventes = () => {
                               const response = await axios.get('https://www.chifaa.sn/pharma_back_test/graphql', {
                                 params: {
                                   query: `{
-                                    ventes(id: ${vente.id}) {
+                                    ventes(reference: "${vente.numero}") {
                                       id
                                       created_at
                                       montant_ht
@@ -189,28 +232,26 @@ const Ventes = () => {
                         </button>
 
                         <button
-                          className="icon-btn cancel-icon"
+                          className={`icon-btn cancel-icon${vente.statut === true ? ' disabled' : ''}`}
                           title="Annuler la vente"
-                          disabled={!vente.paye}
+                          disabled={vente.statut === true}
                           aria-label={`Annuler la vente ${vente.numero}`}
                           onClick={() => {
-                            // TODO: implement cancel with confirmation
-                            console.log('Cancel clicked for', vente.id);
+                            if (vente.statut === false) {
+                              setConfirmAnnulationId(vente.id);
+                            }
                           }}
                         >
-                          <FaBan />
+                          <FaTimes />
                         </button>
 
                         <button
-                          className="icon-btn delete-icon"
-                          title="Supprimer"
-                          aria-label={`Supprimer la vente ${vente.numero}`}
-                          onClick={() => {
-                            // TODO: implement delete with confirmation
-                            console.log('Delete clicked for', vente.id);
-                          }}
+                          className="icon-btn pdf-icon"
+                          title="Générer PDF"
+                          aria-label={`Générer PDF de la vente ${vente.numero}`}
+                          onClick={() => window.open(`https://www.chifaa.sn/pharma_back_test/vente/generate-pdf/${vente.id}`, '_blank')}
                         >
-                          <FaTrash />
+                          <FaFilePdf />
                         </button>
                       </div>
                     </td>
@@ -276,6 +317,20 @@ const Ventes = () => {
 
       {/* Toast notification */}
       <Toast message={toastMessage} onClose={() => setToastMessage('')} />
+      <div
+        className={`custom-confirm-overlay ${confirmAnnulationId ? 'show' : ''}`}
+        onClick={handleCancelAnnulation}
+      >
+        <div className="custom-toast-confirm" onClick={e => e.stopPropagation()}>
+          <div className="custom-toast-content">
+            <span>Voulez-vous vraiment annuler cette vente ?</span>
+            <div className="custom-toast-actions">
+              <button className="btn-confirm" onClick={handleConfirmAnnulation}>Oui</button>
+              <button className="btn-cancel" onClick={handleCancelAnnulation}>Non</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <VenteDetailModal
         isOpen={isDetailModalOpen}
@@ -284,6 +339,11 @@ const Ventes = () => {
           setSelectedVente(null);
         }}
         venteData={selectedVente}
+      />
+
+      <NouvelleVenteModal
+        isOpen={isNewSaleModalOpen}
+        onClose={() => setIsNewSaleModalOpen(false)}
       />
     </div>
   );

@@ -1,8 +1,132 @@
+/* Toast personnalisé pour confirmation d'annulation */
+.custom-toast-confirm {
+  position: fixed;
+  top: 500px;
+  left: 40%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 2px solid #b30000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  z-index: 2000;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+}
+.custom-toast-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.custom-toast-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+.btn-confirm {
+  background: #b30000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-confirm:hover {
+  background: #d32f2f;
+}
+.btn-cancel {
+  background: #eee;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-cancel:hover {
+  background: #ccc;
+}
+
+/* Overlay for centered confirmation */
+.custom-confirm-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: background 0.25s ease, opacity 0.25s ease, visibility 0.25s;
+}
+.custom-confirm-overlay.show {
+  background: rgba(0,0,0,0.45);
+  opacity: 1;
+  visibility: visible;
+}
+
+.custom-toast-confirm {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  min-width: 340px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  transform: translateY(-10px) scale(0.98);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(.2,.8,.2,1), opacity 0.25s ease;
+}
+.custom-confirm-overlay.show .custom-toast-confirm {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+/* Vente annulée */
+.vente-annulee {
+  background-color: #ffeaea !important;
+  color: #b30000 !important;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 .ventes-container {
   padding: 2rem;
   font-family: 'Indie Flower', cursive;
+}
+
+.ventes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.new-sale-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.new-sale-btn:hover {
+  background-color: #218838;
+}
+
+.new-sale-btn svg {
+  font-size: 1.1rem;
 }
 
 .loading-sketch {
@@ -184,8 +308,8 @@
   transform: none;
 }
 
-.icon-btn.delete-icon {
-  color: #dc2626; /* red */
+.icon-btn.pdf-icon {
+  color: #047857; /* green */
 }
 
 .icon-btn:hover {
