@@ -107,11 +107,10 @@ const NouvelleVenteModal = ({ isOpen, onClose }) => {
   const handleQuantityChange = (productId, newQuantity) => {
     setSelectedProducts(selectedProducts.map(product => {
       if (product.id === productId) {
-        const quantity = Math.min(Math.max(1, newQuantity), product.stock_pharma);
         return {
           ...product,
-          quantity,
-          total: quantity * product.prix_vente
+          quantity: newQuantity,
+          total: newQuantity * product.prix_vente
         };
       }
       return product;
@@ -124,14 +123,21 @@ const NouvelleVenteModal = ({ isOpen, onClose }) => {
     try {
       const token = auth.getToken();
       const vente = {
-        client,
-        numero: invoiceNumber.toString(),
-        montant_ht: totalHT,
-        produits: selectedProducts.map(product => ({
+        details: selectedProducts.map(product => ({
           produit_id: product.id,
+          remise: 0,
+          rm: 0,
           qte: product.quantity,
-          prix_vente: product.prix_vente
-        }))
+          quantite: product.quantity,
+          prix_vente: product.prix_vente,
+          pv: product.prix_vente,
+          total: product.prix_vente * product.quantity,
+          nom: product.designation,
+          code: product.code || "null"
+        })),
+        montantencaisse: totalHT, // Montant total comme montant encaissé par défaut
+        monnaie: 0,
+        nom_complet: client
       };
 
       await axios.post('https://www.chifaa.sn/pharma_back_test/api/ventes', vente, {
@@ -141,11 +147,26 @@ const NouvelleVenteModal = ({ isOpen, onClose }) => {
         }
       });
 
+      // Réinitialiser le formulaire
+      setClient('');
+      setSearchQuery('');
+      setSearchResults([]);
+      setSelectedProducts([]);
+      setTotalHT(0);
+      
+      // Fermer le modal
       onClose();
-      // Recharger la liste des ventes
-      window.location.reload();
+      
+      // Recharger la liste des ventes sans recharger toute la page
+      if (typeof window.fetchVentes === 'function') {
+        window.fetchVentes(1, 10); // Recharger la première page avec 10 éléments
+      } else {
+        // Si la fonction n'est pas disponible, recharger la page
+        window.location.reload();
+      }
     } catch (error) {
       console.error('Erreur lors de la création de la vente:', error);
+      alert('Une erreur est survenue lors de la création de la vente. Veuillez réessayer.');
     }
   };
 
@@ -242,20 +263,11 @@ const NouvelleVenteModal = ({ isOpen, onClose }) => {
                       <td>{product.designation} - Stock : {product.stock_pharma}</td>
                       <td>
                         <input
-                          type="number"
-                          min="1"
-                          max={product.stock_pharma}
-                          value={1}
+                          type="text"
+                          value={product.quantity}
                           onChange={(e) => {
-                            const value = parseInt(e.target.value);
-                            if (!isNaN(value) && value > 0) {
-                              handleQuantityChange(product.id, value);
-                            }
-                          }}
-                          onKeyPress={(e) => {
-                            if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                            }
+                            const value = e.target.value === '' ? 0 : parseInt(e.target.value);
+                            handleQuantityChange(product.id, value);
                           }}
                           style={{ width: '80px' }}
                         />
